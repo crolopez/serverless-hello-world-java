@@ -20,11 +20,14 @@ jobs:
       - name: Build Lambda
         run: ./gradlew build -Dquarkus.package.type=native -i
 
+      - name: Compress Artifacts
+        run: tar -czvf quarkus-artifacts.tar.gz -C build .
+
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: quarkus-artifacts
-          path: build/*
+          path: quarkus-artifacts.tar.gz
 
   DeployHelloWorld:
     needs: Build
@@ -37,7 +40,9 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: quarkus-artifacts
-          path: build/
+
+      - name: Decompress Artifacts
+        run: tar -xzvf quarkus-artifacts.tar.gz
 
       - name: AWS Login
         uses: aws-actions/configure-aws-credentials@v1
@@ -61,7 +66,9 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: quarkus-artifacts
-          path: build/
+
+      - name: Decompress Artifacts
+        run: tar -xzvf quarkus-artifacts.tar.gz
 
       - name: AWS Login
         uses: aws-actions/configure-aws-credentials@v1
