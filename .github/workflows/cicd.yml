@@ -18,7 +18,7 @@ jobs:
           distribution: 'adopt'
 
       - name: Build Lambda
-        run: ./gradlew quarkusBuild -i
+        run: ./gradlew build -Dquarkus.package.type=native -i
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
@@ -48,7 +48,7 @@ jobs:
 
       - name: Deploy to AWS Lambda
         run: |
-          ./manage_function.sh deploy ServerlessHelloWorldJava QUARKUS_LAMBDA_HANDLER=hello-world
+          ./manage_function.sh native deploy ServerlessHelloWorldJava QUARKUS_LAMBDA_HANDLER=hello-world
 
   DeployByeWorld:
     needs: Build
@@ -72,4 +72,4 @@ jobs:
 
       - name: Deploy to AWS Lambda
         run: |
-          ./manage_function.sh deploy ServerlessByeWorldJava QUARKUS_LAMBDA_HANDLER=bye-world
+          ./manage_function.sh native deploy ServerlessByeWorldJava QUARKUS_LAMBDA_HANDLER=bye-world
